@@ -3,7 +3,7 @@
 Grupo #23
 #### César Reyes- 201700392
 #### Alan Morataya - 201700944
-#### Kevin García - 201701055
+#### Kevin García - 201709155
 
 ## Descripción 
 
@@ -28,10 +28,9 @@ Múltiples personas pueden llegar al mismo tiempo al centro de acopio y pueden s
 
 Se debe modelar y desarrollar un sistema capaz de representar este comportamiento con las restricciones del negocio que sean obvias y lógicas, algunos ejemplos de estas son:
 
-```bash
-- Múltiples personas no pueden colocar su caja en el mismo espacio de la estantería.
-- Múltiples personas no pueden retirar la misma caja de la estantería.
-```
+
+* Múltiples personas no pueden colocar su caja en el mismo espacio de la estantería.
+* Múltiples personas no pueden retirar la misma caja de la estantería.
 
 No se pueden utilizar estructuras como BlockingQueue, solamente se pueden utilizar las herramientas vistas en el laboratorio, tales como : Synchronized, ReentrantLock, etc.
 
