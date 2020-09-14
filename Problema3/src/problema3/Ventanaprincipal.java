@@ -7,9 +7,16 @@ package problema3;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.Timer;
 
 /**
  *
@@ -17,9 +24,26 @@ import javax.swing.JLabel;
  */
 public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
 
-    JLabel jltiempo, jlt, tiempo, jlfondo, navej1, navej2;
+    JLabel jltiempo, jlt, tiempo, jlfondo;
+    //IMAGENES PARA JUGADOR 1 Y 22
+    public static JLabel navej1, navej2;
     public static boolean muerte1, muerte2 = false;
+    public int x1, x2, y1, y2 = 0;
+    Jugador j1, j2;
+    Thread hilo;
+    public static int contadortiempo = 0;
+    public static boolean sedisparo1, sedisparo2 = false;
+    //LABELS PARA CADA DISPARO DE CADA JUGADOR
+    public static JLabel disparo1, disparo2;
+    public static int movimiento1 = 0;
 
+    //array para meter todas las naves generadas
+    public static ArrayList<Enemigo> arraynaves = new ArrayList<Enemigo>();
+
+    //variable para ver cada cuanto genero naves
+    public int pivote = 8;
+
+    //  public static int mov1=0
     /**
      * Creates new form Ventanaprincipal
      */
@@ -35,8 +59,7 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
         jlfondo.setBounds(0, 0, 800, 508);
         add(jlfondo);
         this.jPanel1.setBackground(Color.BLACK);
-        
-        
+
         //envio 0 a los 2 punteos de j1 y j2
         jLabel4.setText("0");
         jLabel7.setText("0");
@@ -44,29 +67,48 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
         System.out.println("ESTOY EN VENTANA");
 
         //INICIO EL RELOJ
-        Reloj crono = new Reloj(jLabel2);
-        new Thread(crono).start();
+        // Reloj crono = new Reloj(jLabel2);
+        // new Thread(crono).start();
         //agrego las naves de jugador 1 y jugador2
-           navej1=new JLabel();
-       
-       ImageIcon im=new ImageIcon(getClass().getResource("/Imagenes/nave1.png"));
-       Icon icono2=new ImageIcon(im.getImage().getScaledInstance(100, 80, Image.SCALE_DEFAULT));
-       //x,y,ancho,alto
-       navej1.setBounds(150,400,90,70);
-       navej1.setIcon(icono2);
-       Jugador j1=new Jugador(navej1);
-       jlfondo.add(navej1);
+        navej1 = new JLabel();
 
-       
-       //------JUGADOR 2
-             navej2=new JLabel();
-           ImageIcon im2=new ImageIcon(getClass().getResource("/Imagenes/nave2.png"));
-       Icon icono3=new ImageIcon(im2.getImage().getScaledInstance(100, 80, Image.SCALE_DEFAULT));
-       //x,y,ancho,alto
-       navej2.setBounds(510,400,90,70);
-       navej2.setIcon(icono3);
-       Jugador j2=new Jugador(navej2);
-       jlfondo.add(navej2);
+        ImageIcon im = new ImageIcon(getClass().getResource("/Imagenes/nave1.png"));
+        Icon icono2 = new ImageIcon(im.getImage().getScaledInstance(100, 80, Image.SCALE_DEFAULT));
+        //x,y,ancho,alto
+        navej1.setBounds(150, 400, 90, 70);
+        navej1.setIcon(icono2);
+        j1 = new Jugador(navej1);
+        j1.setPosx(150);
+        j1.setPosy(400);
+        jlfondo.add(navej1);
+
+        //------JUGADOR 2
+        navej2 = new JLabel();
+        ImageIcon im2 = new ImageIcon(getClass().getResource("/Imagenes/nave2.png"));
+        Icon icono3 = new ImageIcon(im2.getImage().getScaledInstance(100, 80, Image.SCALE_DEFAULT));
+        //x,y,ancho,alto
+        navej2.setBounds(510, 400, 90, 70);
+        navej2.setIcon(icono3);
+        j2 = new Jugador(navej2);
+        j2.setPosx(100);
+        j2.setPosy(400);
+        jlfondo.add(navej2);
+        //j2.start();
+        // addKeyListener(new ManejoDeTeclas_201709362());
+//          new Thread(j2).start();
+        //AGREGO EL EVENTO MOVER PARA LA NAVE
+        addKeyListener(new KeyAdapter() {
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+                movernaves(e);
+
+            }
+        });
+
+        hilo = new Thread(this);
+        hilo.start();
     }
 
     /**
@@ -190,6 +232,150 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
     /**
      * @param args the command line arguments
      */
+    public class ManejoDeTeclas_201709362 implements KeyListener {
+
+        //movimiento nave----0 arriba-1 abajo
+        @Override
+        public void keyPressed(KeyEvent ke) {
+            ejecutarAccionTeclado(0, ke.getKeyCode());
+        }
+
+        @Override
+        public void keyTyped(KeyEvent ke) {
+        }
+
+        @Override
+        public void keyReleased(KeyEvent ke) {
+            ejecutarAccionTeclado(1, ke.getKeyCode());
+        }
+    }
+
+    private void ejecutarAccionTeclado(int estado, int tecla) {
+        this.x1 = navej1.getX();
+        y1 = navej1.getY();
+        this.x2 = navej2.getX();
+        this.y2 = navej2.getY();
+        switch (tecla) {
+
+            case KeyEvent.VK_A:
+                if (navej1.getX() >= 0) {
+                    // this.movimiento1=1;
+                    if (estado == 0) {
+                        navej1.setLocation(x1 - 10, y1);
+                    }
+
+                }
+                break;
+            case KeyEvent.VK_D:
+                if (navej1.getX() < 700) {
+                    if (estado == 0) {
+                        navej1.setLocation(x1 + 10, y1);
+                    }
+
+                }
+                break;
+
+            case KeyEvent.VK_J:
+                if (navej2.getX() >= 0) {
+
+                    if (estado == 0) {
+                        navej2.setLocation(x2 - 10, y2);
+                    }
+
+                }
+                break;
+
+            case KeyEvent.VK_L:
+                if (navej2.getX() < 700) {
+                    // System.out.println("ESTOY PRESIONANDO L");
+                    //*   j2.setPosx(x2+10);
+                    //j2.setPosy(y2);
+
+                    if (estado == 0) {
+                        navej2.setLocation(x2 + 10, y2);
+                    }
+
+                }
+                break;
+
+            case KeyEvent.VK_SPACE:
+
+                if (estado == 0) {
+                    disparo(navej1.getX() + 20);
+                }
+
+                break;
+
+            // case KeyEvent.VK_SPACE:
+            //    disparo(navej.getY() + 20);
+            //   break;
+        }
+    }
+
+    private void movernaves(java.awt.event.KeyEvent evt) {
+        this.x1 = navej1.getX();
+        y1 = navej1.getY();
+        this.x2 = navej2.getX();
+        this.y2 = navej2.getY();
+        switch (evt.getExtendedKeyCode()) {
+
+            case KeyEvent.VK_A:
+                if (navej1.getX() >= 0) {
+                    // this.movimiento1=1;
+                    navej1.setLocation(x1 - 10, y1);
+                }
+                break;
+            case KeyEvent.VK_D:
+                if (navej1.getX() < 700) {
+                    navej1.setLocation(x1 + 10, y1);
+                }
+                break;
+
+            case KeyEvent.VK_J:
+                if (navej2.getX() >= 0) {
+                    navej2.setLocation(x2 - 10, y2);
+                }
+                break;
+
+            case KeyEvent.VK_L:
+                if (navej2.getX() < 700) {
+                    System.out.println("ESTOY PRESIONANDO L");
+                    //*   j2.setPosx(x2+10);
+                    //j2.setPosy(y2);
+
+                    navej2.setLocation(x2 + 10, y2);
+                }
+                break;
+
+            case KeyEvent.VK_S:
+                disparo(navej1.getX() + 30);
+                break;
+
+            case KeyEvent.VK_K:
+                disparo(navej2.getX() + 30);
+                break;
+            // case KeyEvent.VK_SPACE:
+            //    disparo(navej.getY() + 20);
+            //   break;
+        }
+    }
+
+    private void disparo(int posicionX) {
+
+        JLabel disparo1 = new JLabel();
+        //  rectangulo3=new Rectangle();
+        ImageIcon d = new ImageIcon(getClass().getResource("/Imagenes/boladefuego.png"));
+        Icon icono3 = new ImageIcon(d.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
+        disparo1.setIcon(icono3);
+        disparo1.setBounds(800, 200, 40, 40);
+        disparo1.setVisible(false);
+        jlfondo.add(disparo1);
+        sedisparo1 = true;
+        Disparo d2 = new Disparo(posicionX, disparo1);
+        d2.start();
+
+    }
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -234,9 +420,62 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 
+    void agregarenemigo() {
+
+    }
+
     @Override
     public void run() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        //  Timer timer = new Timer (5,(ae) -> {
+        while (true) {
+            if (pivote == 0) {
+                pivote = 2;//cuando llega a 0 se queda generando naves cada 2 segundos
+            }
+            jLabel2.setText(String.valueOf(contadortiempo));
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Ventanaprincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            contadortiempo++;
+            if (contadortiempo == 0 || contadortiempo == 1 || contadortiempo == 2) {
+                JLabel naveEnemiga = new JLabel();
+                ImageIcon ne = new ImageIcon(getClass().getResource("/Imagenes/enemigo1.png"));
+                Icon icono4 = new ImageIcon(ne.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+                naveEnemiga.setIcon(icono4);
+                naveEnemiga.setBounds(-200, 100, 100, 100);
+                jlfondo.add(naveEnemiga);
+
+                Enemigo en = new Enemigo(naveEnemiga);
+                arraynaves.add(en);
+                en.start();
+            }
+            System.out.println("PIVOTE ES " + pivote);
+            // System.out.println("CONTADOR TIEMPO ES "+jLabel2.getText());
+            if (contadortiempo % pivote == 0) {
+                JLabel naveEnemiga = new JLabel();
+                ImageIcon ne = new ImageIcon(getClass().getResource("/Imagenes/enemigo1.png"));
+                Icon icono4 = new ImageIcon(ne.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+                naveEnemiga.setIcon(icono4);
+                naveEnemiga.setBounds(-200, 100, 100, 100);
+                jlfondo.add(naveEnemiga);
+
+                Enemigo en = new Enemigo(naveEnemiga);
+                arraynaves.add(en);
+                en.start();
+
+            }
+
+            if (contadortiempo % 25 == 0) {
+                if (pivote != 0) {
+                    pivote = pivote - 2;
+                }
+            }
+
+        }
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //  });
     }
 
 }

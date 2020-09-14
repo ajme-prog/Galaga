@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
  */
 public class Reloj extends Thread {
     int tiempo;
-    int segundos;
+   public int segundos;
     int minutos;
     JLabel time;
      public static boolean bandera=false;
@@ -81,6 +81,7 @@ public class Reloj extends Thread {
              
                   this.sleep(1000);
                   segundos++;
+                  Ventanaprincipal.contadortiempo++;
                   time.setText(String.valueOf(segundos));
              
            
