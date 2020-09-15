@@ -7,6 +7,7 @@ package problema3;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -27,7 +28,14 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
     JLabel jltiempo, jlt, tiempo, jlfondo;
     //IMAGENES PARA JUGADOR 1 Y 22
     public static JLabel navej1, navej2;
+    //rectangulos para ver las colisiones entre naves
+    public static Rectangle rect1, rect2;
     public static boolean muerte1, muerte2 = false;
+    //variables para contar vidas
+    public static int vidas1 = 3;
+    public static int vidas2 = 3;
+    //variables para contar puntos
+    public static int puntos1, puntos2 = 0;
     public int x1, x2, y1, y2 = 0;
     Jugador j1, j2;
     Thread hilo;
@@ -71,11 +79,13 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
         // new Thread(crono).start();
         //agrego las naves de jugador 1 y jugador2
         navej1 = new JLabel();
+        rect1 = new Rectangle();
 
         ImageIcon im = new ImageIcon(getClass().getResource("/Imagenes/nave1.png"));
         Icon icono2 = new ImageIcon(im.getImage().getScaledInstance(100, 80, Image.SCALE_DEFAULT));
         //x,y,ancho,alto
         navej1.setBounds(150, 400, 90, 70);
+        rect1.setBounds(150, 400, 90, 70);
         navej1.setIcon(icono2);
         j1 = new Jugador(navej1);
         j1.setPosx(150);
@@ -84,10 +94,12 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
 
         //------JUGADOR 2
         navej2 = new JLabel();
+        rect2 = new Rectangle();
         ImageIcon im2 = new ImageIcon(getClass().getResource("/Imagenes/nave2.png"));
         Icon icono3 = new ImageIcon(im2.getImage().getScaledInstance(100, 80, Image.SCALE_DEFAULT));
         //x,y,ancho,alto
         navej2.setBounds(510, 400, 90, 70);
+        rect2.setBounds(510, 400, 90, 70);
         navej2.setIcon(icono3);
         j2 = new Jugador(navej2);
         j2.setPosx(100);
@@ -129,6 +141,10 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -164,6 +180,22 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("JUGADOR 2");
 
+        jLabel9.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("VIDAS:");
+
+        jLabel10.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("jLabel10");
+
+        jLabel11.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("VIDAS:");
+
+        jLabel12.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("jLabel12");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -173,21 +205,30 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
                 .addComponent(jLabel1)
                 .addGap(10, 10, 10)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(80, 80, 80)
+                .addGap(51, 51, 51)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)))
-                .addGap(96, 96, 96)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addGap(70, 70, 70)
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel12)
+                        .addGap(20, 20, 20)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel7))
-                    .addComponent(jLabel8))
-                .addContainerGap(399, Short.MAX_VALUE))
+                        .addComponent(jLabel7)
+                        .addContainerGap(192, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel8)
+                        .addGap(150, 150, 150))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -206,10 +247,15 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel7)
-                        .addComponent(jLabel6))
+                        .addComponent(jLabel6)
+                        .addComponent(jLabel11)
+                        .addComponent(jLabel12))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel4)))
+                        .addComponent(jLabel9)
+                        .addComponent(jLabel10)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))))
                 .addGap(23, 23, 23))
         );
 
@@ -301,7 +347,7 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
             case KeyEvent.VK_SPACE:
 
                 if (estado == 0) {
-                    disparo(navej1.getX() + 20);
+                    disparo(navej1.getX() + 20, 1);
                 }
 
                 break;
@@ -320,39 +366,78 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
         switch (evt.getExtendedKeyCode()) {
 
             case KeyEvent.VK_A:
+
                 if (navej1.getX() >= 0) {
-                    // this.movimiento1=1;
-                    navej1.setLocation(x1 - 10, y1);
+                    if (muerte1 == false) {
+                        if (rect1.intersects(rect2)) {
+                            // break;
+                            navej1.setLocation(x1 - 3, y1);
+                            rect1.setLocation(x1 - 3, y1);
+                        } else {
+                            navej1.setLocation(x1 - 10, y1);
+                            rect1.setLocation(x1 - 10, y1);
+                        }
+                    }
                 }
                 break;
             case KeyEvent.VK_D:
                 if (navej1.getX() < 700) {
-                    navej1.setLocation(x1 + 10, y1);
+                    if (muerte1 == false) {
+                        if (rect1.intersects(rect2)) {
+                            navej1.setLocation(x1 - 10, y1);
+                            rect1.setLocation(x1 - 10, y1);
+
+                            // navej2.setLocation(x2 + 3, y2);
+                            //rect2.setLocation(x2 + 3, y2);
+                        } else {
+                            navej1.setLocation(x1 + 10, y1);
+                            rect1.setLocation(x1 + 10, y1);
+                        }
+
+                    }
                 }
                 break;
 
             case KeyEvent.VK_J:
                 if (navej2.getX() >= 0) {
-                    navej2.setLocation(x2 - 10, y2);
+                    if (muerte2 == false) {
+                        if (rect2.intersects(rect1)) {
+                            navej2.setLocation(x2 + 10, y2);
+                            rect2.setLocation(x2 + 10, y2);
+                        } else {
+                            navej2.setLocation(x2 - 10, y2);
+                            rect2.setLocation(x2 - 10, y2);
+                        }
+
+                    }
                 }
                 break;
 
             case KeyEvent.VK_L:
                 if (navej2.getX() < 700) {
-                    System.out.println("ESTOY PRESIONANDO L");
-                    //*   j2.setPosx(x2+10);
-                    //j2.setPosy(y2);
+                      if(muerte2==false){
+                    if (rect2.intersects(rect1)) {
+                        //  navej2.setLocation(x2 + 3, y2);
+                        //drect2.setLocation(x2 + 3, y2);
+                    } else {
+                        navej2.setLocation(x2 + 10, y2);
+                        rect2.setLocation(x2 + 10, y2);
 
-                    navej2.setLocation(x2 + 10, y2);
+                    }
+                      }
                 }
                 break;
 
             case KeyEvent.VK_S:
-                disparo(navej1.getX() + 30);
+                if(muerte1==false){
+                disparo(navej1.getX() + 30, 1);
+                }
                 break;
 
             case KeyEvent.VK_K:
-                disparo(navej2.getX() + 30);
+                if(muerte2==false){
+                disparo(navej2.getX() + 30, 2);
+                }
                 break;
             // case KeyEvent.VK_SPACE:
             //    disparo(navej.getY() + 20);
@@ -360,7 +445,7 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
         }
     }
 
-    private void disparo(int posicionX) {
+    private void disparo(int posicionX, int numeronave) {
 
         JLabel disparo1 = new JLabel();
         //  rectangulo3=new Rectangle();
@@ -372,6 +457,7 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
         jlfondo.add(disparo1);
         sedisparo1 = true;
         Disparo d2 = new Disparo(posicionX, disparo1);
+        d2.numeronave = numeronave;
         d2.start();
 
     }
@@ -410,6 +496,9 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -417,6 +506,7 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 
@@ -429,6 +519,22 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
 
         //  Timer timer = new Timer (5,(ae) -> {
         while (true) {
+            jLabel4.setText(String.valueOf(puntos1));
+            jLabel7.setText(String.valueOf(puntos2));
+            jLabel10.setText(String.valueOf(vidas1));
+            jLabel12.setText(String.valueOf(vidas2));
+
+            if (this.vidas1 == 0) {
+                navej1.setVisible(false);
+                this.rect1.setBounds(0, 0, -100, -100);
+                muerte1 = true;
+            }
+            if (this.vidas2 == 0) {
+                navej2.setVisible(false);
+                this.rect2.setBounds(0, 0, -100, -100);
+                muerte2 = true;
+
+            }
             if (pivote == 0) {
                 pivote = 2;//cuando llega a 0 se queda generando naves cada 2 segundos
             }
@@ -441,10 +547,10 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
             contadortiempo++;
             if (contadortiempo == 0 || contadortiempo == 1 || contadortiempo == 2) {
                 JLabel naveEnemiga = new JLabel();
-                ImageIcon ne = new ImageIcon(getClass().getResource("/Imagenes/enemigo1.png"));
-                Icon icono4 = new ImageIcon(ne.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+                ImageIcon ne = new ImageIcon(getClass().getResource("/Imagenes/enemigo.gif"));
+                Icon icono4 = new ImageIcon(ne.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
                 naveEnemiga.setIcon(icono4);
-                naveEnemiga.setBounds(-200, 100, 100, 100);
+                naveEnemiga.setBounds(-200, 100, 50, 50);
                 jlfondo.add(naveEnemiga);
 
                 Enemigo en = new Enemigo(naveEnemiga);
@@ -455,10 +561,10 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
             // System.out.println("CONTADOR TIEMPO ES "+jLabel2.getText());
             if (contadortiempo % pivote == 0) {
                 JLabel naveEnemiga = new JLabel();
-                ImageIcon ne = new ImageIcon(getClass().getResource("/Imagenes/enemigo1.png"));
-                Icon icono4 = new ImageIcon(ne.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+                ImageIcon ne = new ImageIcon(getClass().getResource("/Imagenes/enemigo.gif"));
+                Icon icono4 = new ImageIcon(ne.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
                 naveEnemiga.setIcon(icono4);
-                naveEnemiga.setBounds(-200, 100, 100, 100);
+                naveEnemiga.setBounds(-200, 100, 50, 50);
                 jlfondo.add(naveEnemiga);
 
                 Enemigo en = new Enemigo(naveEnemiga);

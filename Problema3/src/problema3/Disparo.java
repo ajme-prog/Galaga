@@ -24,6 +24,7 @@ public class Disparo extends Thread {
     Timer timer;
     int n = 400;
     Rectangle rectangulo;
+    int numeronave=0;
 
     public Disparo(int posicionX, JLabel disp) {
         this.posx = posicionX;
@@ -115,12 +116,20 @@ public class Disparo extends Thread {
                         naveaux.vidas--;
 
                         if (naveaux.vidas == 0) {
+                            
                             System.out.println("LAS VIDAS DE LA NAVE SON 0 VOY A BORRARLA");
+                            if(this.numeronave==1){
+                            Ventanaprincipal.puntos1++;
+                            }
+                            else if(this.numeronave==2){
+                            Ventanaprincipal.puntos2++;
+                            }
                             Ventanaprincipal.arraynaves.get(i).stop();
                             Ventanaprincipal.arraynaves.get(i).imagen.setVisible(false);
                             Ventanaprincipal.arraynaves.remove(Ventanaprincipal.arraynaves.get(i));
                         }
                         imagen.setVisible(false);
+                        
                         this.stop();
                         
                     }

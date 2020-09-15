@@ -6,6 +6,7 @@
 package problema3;
 
 import static com.sun.java.accessibility.util.AWTEventMonitor.addKeyListener;
+import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JLabel;
@@ -20,11 +21,14 @@ public class Jugador extends Thread{
     JLabel imagen;
     int vidas;
     int puntos;
+    Rectangle rectangulo;
     private final int IZQUIERDAJ1=0;
     public Jugador(JLabel imagen) {
         this.posx = 0;
         this.posy = 0;
         this.imagen = imagen;
+        this.rectangulo=new Rectangle();
+        this.rectangulo.setBounds(imagen.getX(),imagen.getY(),imagen.getWidth(),imagen.getHeight());
         this.vidas=3;
         this.puntos=0;
     }
@@ -73,6 +77,7 @@ public class Jugador extends Thread{
     public void run() {
         while (true){
    this.imagen.setLocation(posx, posx);
+   
               }
     /*  switch (Ventanaprincipal.mov1) {
 

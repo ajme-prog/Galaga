@@ -24,7 +24,7 @@ public class Enemigo extends Thread {
     int n = 0;
     public Rectangle rectangulo1;
     public boolean llegofin = false;
- 
+
     public int getPosx() {
         return posx;
     }
@@ -75,7 +75,7 @@ public class Enemigo extends Thread {
     public Enemigo(JLabel imagen) {
         this.imagen = imagen;
         rectangulo1 = new Rectangle();
-        this.rectangulo1.setBounds(imagen.getX(),imagen.getY(),imagen.getWidth(),imagen.getHeight());
+        this.rectangulo1.setBounds(imagen.getX(), imagen.getY(), imagen.getWidth(), imagen.getHeight());
     }
 
     public boolean colision(int posicionEnemigoY, int posicionEnemigoX, int posicionPrincipalY, int posicionPrincipalX, int anchoEnemigo, int largoEnemigo, int anchoPrincipal, int largoPrincipal) {
@@ -121,7 +121,20 @@ public class Enemigo extends Thread {
                 imagen.setLocation(valorDado, n);
                 rectangulo1.setLocation(valorDado, n);
                 // rectangulo.setLocation(n, valorDado);
+                if (this.rectangulo1.intersects(Ventanaprincipal.rect1)) {
 
+                    Ventanaprincipal.vidas1--;
+                    this.imagen.setVisible(false);
+                    this.stop();
+                    Ventanaprincipal.arraynaves.remove(this);
+                }
+
+                if (this.rectangulo1.intersects(Ventanaprincipal.rect2)) {
+                    Ventanaprincipal.vidas2--;
+                    this.imagen.setVisible(false);
+                    this.stop();
+                    Ventanaprincipal.arraynaves.remove(this);
+                }
                 /*if (colision(valorDado, n, Ventanaprincipal.navej1.getY(), Ventanaprincipal.navej1.getX(), 100, 100, 100, 80)) {
                     System.out.println("HUBO COLISION");
                     imagen.setVisible(false);
@@ -131,7 +144,7 @@ public class Enemigo extends Thread {
                     return;
                 }*/
 
-             /*   if (Ventanaprincipal.sedisparo1 == true) {
+ /*   if (Ventanaprincipal.sedisparo1 == true) {
 
                     if (colision(valorDado, n, Ventanaprincipal.disparo1.getY(), Ventanaprincipal.disparo1.getX(), 100, 100, 40, 40)) {
                         disparo++;
@@ -157,7 +170,6 @@ public class Enemigo extends Thread {
                         //  d.stop();
                     }
                 }*/
-
                 try {
                     Thread.sleep(15);
                 } catch (InterruptedException ex) {
@@ -172,6 +184,9 @@ public class Enemigo extends Thread {
 
                 System.out.println("LLEGO A FIN se le tiene que restar vidas");
                 llegofin = true;
+                Ventanaprincipal.vidas1--;
+                Ventanaprincipal.vidas2--;
+                Ventanaprincipal.arraynaves.remove(this);
                 //   this.imagen.setVisible(false);
                 // this.stop();
 
