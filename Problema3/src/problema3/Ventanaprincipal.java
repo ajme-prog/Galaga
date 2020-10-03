@@ -25,7 +25,19 @@ import javax.swing.Timer;
  */
 public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
 
-    JLabel jltiempo, jlt, tiempo, jlfondo;
+    //-------------VARIABLE PRUEBA
+    public static int movimientoNave = -1;
+    public static int movimientoNave2 = -1;
+
+    //---------------VARIABLES PARA LAS BALAS
+    public static int movimientobala1 = -1;
+    public static int movimientobala2 = -1;
+
+    java.util.List<String> Dir;
+    private int disp;
+    private JLabel lDireccion, lCouunt;
+    JLabel jltiempo, jlt, tiempo;
+    public static JLabel jlfondo;
     //IMAGENES PARA JUGADOR 1 Y 22
     public static JLabel navej1, navej2;
     //rectangulos para ver las colisiones entre naves
@@ -36,7 +48,10 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
     public static int vidas2 = 3;
     //variables para contar puntos
     public static int puntos1, puntos2 = 0;
-    public int x1, x2, y1, y2 = 0;
+
+    //-----VOLVI ESTAS ESTATICAS REVISAR SI DA CLAVO DEJARLAS NORMAL
+    public static int x1, x2, y1, y2 = 0;
+
     Jugador j1, j2;
     Thread hilo;
     public static int contadortiempo = 0;
@@ -55,8 +70,16 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
     /**
      * Creates new form Ventanaprincipal
      */
+    //----------PRUEBA MOVIMIENTO NAVE
+    MovimientoNave mov = new MovimientoNave();
+    MovimientoNave2 mov2 = new MovimientoNave2();
+
+    //-------movimiento bala
+    Movimientobala1 movb=new Movimientobala1();
+    Movimientobala2 movb2=new Movimientobala2();
     public Ventanaprincipal() {
         initComponents();
+
         //[969, 519] ES ANCHO,ALTO
         this.setSize(800, 508);
         setResizable(false);
@@ -106,10 +129,10 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
         j2.setPosy(400);
         jlfondo.add(navej2);
         //j2.start();
-        // addKeyListener(new ManejoDeTeclas_201709362());
+        addKeyListener(new ManejoDeTeclas_201709362());
 //          new Thread(j2).start();
         //AGREGO EL EVENTO MOVER PARA LA NAVE
-        addKeyListener(new KeyAdapter() {
+        /*   addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyPressed(KeyEvent e) {
@@ -117,10 +140,22 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
                 movernaves(e);
 
             }
-        });
 
+        });
+         */
         hilo = new Thread(this);
         hilo.start();
+        mov.start();
+        mov2.start();
+        
+        movb.start();
+        movb2.start();
+    }
+
+    private void initPropiedadesVentanta() {
+        // setSize(ANCHO_VENTANA, ALTO_VENTANA);
+        // setResizable(false);
+        addKeyListener(new ManejoDeTeclas_201709362());
     }
 
     /**
@@ -251,11 +286,11 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
                         .addComponent(jLabel11)
                         .addComponent(jLabel12))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel9)
-                        .addComponent(jLabel10)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))))
+                        .addComponent(jLabel10)))
                 .addGap(23, 23, 23))
         );
 
@@ -298,66 +333,76 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
 
     private void ejecutarAccionTeclado(int estado, int tecla) {
         this.x1 = navej1.getX();
-        y1 = navej1.getY();
+        this.y1 = navej1.getY();
         this.x2 = navej2.getX();
         this.y2 = navej2.getY();
         switch (tecla) {
 
             case KeyEvent.VK_A:
-                if (navej1.getX() >= 0) {
-                    // this.movimiento1=1;
-                    if (estado == 0) {
-                        navej1.setLocation(x1 - 10, y1);
-                    }
 
+                if (estado == 0) {
+                    // System.out.println("MOV NAVE A");
+                    movimientoNave = 0;
+                } else {
+                    movimientoNave = 2;
                 }
                 break;
             case KeyEvent.VK_D:
-                if (navej1.getX() < 700) {
-                    if (estado == 0) {
-                        navej1.setLocation(x1 + 10, y1);
-                    }
 
+                if (estado == 0) {
+                    movimientoNave = 1;
+                } else {
+                    movimientoNave = 2;
                 }
                 break;
 
             case KeyEvent.VK_J:
-                if (navej2.getX() >= 0) {
 
-                    if (estado == 0) {
-                        navej2.setLocation(x2 - 10, y2);
-                    }
-
+                if (estado == 0) {
+                    movimientoNave2 = 3;
+                } else {
+                    movimientoNave2 = 2;
                 }
                 break;
 
             case KeyEvent.VK_L:
-                if (navej2.getX() < 700) {
-                    // System.out.println("ESTOY PRESIONANDO L");
-                    //*   j2.setPosx(x2+10);
-                    //j2.setPosy(y2);
-
-                    if (estado == 0) {
-                        navej2.setLocation(x2 + 10, y2);
-                    }
-
-                }
-                break;
-
-            case KeyEvent.VK_SPACE:
 
                 if (estado == 0) {
-                    disparo(navej1.getX() + 20, 1);
+                    movimientoNave2 = 4;
+                } else {
+                    movimientoNave2 = 2;
                 }
-
                 break;
 
+            case KeyEvent.VK_S:
+
+                if (estado == 0) {
+                    if (muerte1 == false) {
+                        movimientobala1 = 1;
+                        // disparo(navej1.getX() + 30, 1);
+                    }
+                } else {
+                    movimientobala1 = 2;
+                }
+                break;
+
+            case KeyEvent.VK_K:
+                if (estado == 0) {
+                    if (muerte2 == false) {
+                        // disparo(navej2.getX() + 30, 2);
+                        movimientobala2 = 1;
+                    }
+                } else {
+                    movimientobala2 = 2;
+                }
+                break;
             // case KeyEvent.VK_SPACE:
             //    disparo(navej.getY() + 20);
             //   break;
         }
     }
 
+    //-------------METODO BUENO------------
     private void movernaves(java.awt.event.KeyEvent evt) {
         this.x1 = navej1.getX();
         y1 = navej1.getY();
@@ -366,7 +411,7 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
         switch (evt.getExtendedKeyCode()) {
 
             case KeyEvent.VK_A:
-
+                System.out.println("USANDO A");
                 if (navej1.getX() >= 0) {
                     if (muerte1 == false) {
                         if (rect1.intersects(rect2)) {
@@ -415,28 +460,32 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
 
             case KeyEvent.VK_L:
                 if (navej2.getX() < 700) {
-                      if(muerte2==false){
-                    if (rect2.intersects(rect1)) {
-                        //  navej2.setLocation(x2 + 3, y2);
-                        //drect2.setLocation(x2 + 3, y2);
-                    } else {
-                        navej2.setLocation(x2 + 10, y2);
-                        rect2.setLocation(x2 + 10, y2);
+                    if (muerte2 == false) {
+                        if (rect2.intersects(rect1)) {
+                            //  navej2.setLocation(x2 - 10, y2);
+                            //d rect2.setLocation(x2 - 10, y2);
+                            //  navej2.setLocation(x2 + 3, y2);
+                            //drect2.setLocation(x2 + 3, y2);
+                        } else {
+                            navej2.setLocation(x2 + 10, y2);
+                            rect2.setLocation(x2 + 10, y2);
 
+                        }
                     }
-                      }
                 }
                 break;
 
             case KeyEvent.VK_S:
-                if(muerte1==false){
-                disparo(navej1.getX() + 30, 1);
+                System.out.println("USANDO S");
+                if (muerte1 == false) {
+
+                    disparo(navej1.getX() + 30, 1);
                 }
                 break;
 
             case KeyEvent.VK_K:
-                if(muerte2==false){
-                disparo(navej2.getX() + 30, 2);
+                if (muerte2 == false) {
+                    disparo(navej2.getX() + 30, 2);
                 }
                 break;
             // case KeyEvent.VK_SPACE:
@@ -519,6 +568,7 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
 
         //  Timer timer = new Timer (5,(ae) -> {
         while (true) {
+            //   initPropiedadesVentanta();
             jLabel4.setText(String.valueOf(puntos1));
             jLabel7.setText(String.valueOf(puntos2));
             jLabel10.setText(String.valueOf(vidas1));
@@ -533,6 +583,11 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
                 navej2.setVisible(false);
                 this.rect2.setBounds(0, 0, -100, -100);
                 muerte2 = true;
+
+            }
+//SI LAS DOS NAVES ESTAN MUERTAS DETENGO EL JUEGO 
+            if (this.muerte1 == true && this.muerte2 == true) {
+                return;
 
             }
             if (pivote == 0) {

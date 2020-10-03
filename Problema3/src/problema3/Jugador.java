@@ -16,21 +16,35 @@ import javax.swing.JLabel;
  * @author Alan
  */
 public class Jugador extends Thread{
-   public int posx;
+
+    public int posx;
     public int posy;
     JLabel imagen;
     int vidas;
     int puntos;
     Rectangle rectangulo;
-    private final int IZQUIERDAJ1=0;
+    private final int IZQUIERDAJ1 = 0;
+
     public Jugador(JLabel imagen) {
+        System.out.println("INSTANCIE UNA NAVE");
         this.posx = 0;
         this.posy = 0;
         this.imagen = imagen;
-        this.rectangulo=new Rectangle();
-        this.rectangulo.setBounds(imagen.getX(),imagen.getY(),imagen.getWidth(),imagen.getHeight());
-        this.vidas=3;
-        this.puntos=0;
+        this.rectangulo = new Rectangle();
+        this.rectangulo.setBounds(imagen.getX(), imagen.getY(), imagen.getWidth(), imagen.getHeight());
+        this.vidas = 3;
+        this.puntos = 0;
+
+      /*  addKeyListener(new KeyAdapter() {
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                System.out.println("ESTOY EN KEYPRESED");
+                movernaves(e);
+
+            }
+        });*/
+
     }
 
     public int getPosx() {
@@ -72,14 +86,14 @@ public class Jugador extends Thread{
     public void setPuntos(int puntos) {
         this.puntos = puntos;
     }
-    
-   @Override
+
+    @Override
     public void run() {
-        while (true){
-   this.imagen.setLocation(posx, posx);
-   
-              }
-    /*  switch (Ventanaprincipal.mov1) {
+        while (true) {
+            this.imagen.setLocation(posx, posx);
+
+        }
+        /*  switch (Ventanaprincipal.mov1) {
 
             case KeyEvent.VK_A:
                 if (imagen.getX() >= 0) {
@@ -108,13 +122,11 @@ public class Jugador extends Thread{
             //   break;
         }*/
     }
-    
-    
-    
-      private void movernaves(java.awt.event.KeyEvent evt) {
+
+    private void movernaves(java.awt.event.KeyEvent evt) {
         this.posx = imagen.getX();
         this.posy = imagen.getY();
-          System.out.println("ESTOY EN MOVER NAVES");
+        System.out.println("ESTOY EN MOVER NAVES DEL JUGADOR");
         switch (evt.getExtendedKeyCode()) {
 
             case KeyEvent.VK_A:
@@ -135,7 +147,7 @@ public class Jugador extends Thread{
                 break;
 
             case KeyEvent.VK_L:
-                if (imagen.getX()< 700) {
+                if (imagen.getX() < 700) {
                     imagen.setLocation(this.posx + 10, this.posy);
                 }
                 break;
