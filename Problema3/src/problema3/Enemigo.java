@@ -112,14 +112,20 @@ public class Enemigo extends Thread {
 
         while (true) {
 
+            if (Ventanaprincipal.muerte1 == true && Ventanaprincipal.muerte2 == true) {
+                this.stop();
+            }
+
             if (llegofin == true) {
                 this.stop();
                 imagen.setVisible(false);
             }
 
             if (n <= 500) {
+
                 imagen.setLocation(valorDado, n);
                 rectangulo1.setLocation(valorDado, n);
+
                 // rectangulo.setLocation(n, valorDado);
                 if (this.rectangulo1.intersects(Ventanaprincipal.rect1)) {
 
@@ -171,7 +177,7 @@ public class Enemigo extends Thread {
                     }
                 }*/
                 try {
-                    Thread.sleep(15);
+                    Thread.sleep(25);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Enemigo.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -184,8 +190,20 @@ public class Enemigo extends Thread {
 
                 System.out.println("LLEGO A FIN se le tiene que restar vidas");
                 llegofin = true;
-                Ventanaprincipal.vidas1--;
-                Ventanaprincipal.vidas2--;
+                if (Ventanaprincipal.muerte1 == false) {
+                    Ventanaprincipal.vidas1--;
+
+                    if (Ventanaprincipal.muerte2 == false) {
+                        Ventanaprincipal.vidas2--;
+                    }
+                } else if (Ventanaprincipal.muerte2 == false) {
+                    Ventanaprincipal.vidas2--;
+
+                    if (Ventanaprincipal.muerte1 == false) {
+                        Ventanaprincipal.vidas1--;
+                    }
+                }
+
                 Ventanaprincipal.arraynaves.remove(this);
                 //   this.imagen.setVisible(false);
                 // this.stop();

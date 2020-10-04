@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 /**
@@ -75,8 +76,9 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
     MovimientoNave2 mov2 = new MovimientoNave2();
 
     //-------movimiento bala
-    Movimientobala1 movb=new Movimientobala1();
-    Movimientobala2 movb2=new Movimientobala2();
+    Movimientobala1 movb = new Movimientobala1();
+    Movimientobala2 movb2 = new Movimientobala2();
+
     public Ventanaprincipal() {
         initComponents();
 
@@ -147,7 +149,7 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
         hilo.start();
         mov.start();
         mov2.start();
-        
+
         movb.start();
         movb2.start();
     }
@@ -578,6 +580,7 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
                 navej1.setVisible(false);
                 this.rect1.setBounds(0, 0, -100, -100);
                 muerte1 = true;
+                navej1.setVisible(false);
             }
             if (this.vidas2 == 0) {
                 navej2.setVisible(false);
@@ -587,6 +590,8 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
             }
 //SI LAS DOS NAVES ESTAN MUERTAS DETENGO EL JUEGO 
             if (this.muerte1 == true && this.muerte2 == true) {
+                JOptionPane.showMessageDialog(null, "Juego Finalizado\n" + "Jugador 1: " + this.puntos1 + "\n" + "Jugador 2: " + this.puntos2);
+
                 return;
 
             }
@@ -615,16 +620,76 @@ public class Ventanaprincipal extends javax.swing.JFrame implements Runnable {
             System.out.println("PIVOTE ES " + pivote);
             // System.out.println("CONTADOR TIEMPO ES "+jLabel2.getText());
             if (contadortiempo % pivote == 0) {
-                JLabel naveEnemiga = new JLabel();
+
+                switch (pivote) {
+                    case 8:
+                        for (int i = 0; i < 2; i++) {
+                            JLabel naveEnemiga = new JLabel();
+                            ImageIcon ne = new ImageIcon(getClass().getResource("/Imagenes/enemigo.gif"));
+                            Icon icono4 = new ImageIcon(ne.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+                            naveEnemiga.setIcon(icono4);
+                            naveEnemiga.setBounds(-200, 100, 50, 50);
+                            jlfondo.add(naveEnemiga);
+
+                            Enemigo en = new Enemigo(naveEnemiga);
+                            arraynaves.add(en);
+                            en.start();
+                        }
+                        break;
+                    /* JLabel naveEnemiga = new JLabel();
                 ImageIcon ne = new ImageIcon(getClass().getResource("/Imagenes/enemigo.gif"));
                 Icon icono4 = new ImageIcon(ne.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
                 naveEnemiga.setIcon(icono4);
                 naveEnemiga.setBounds(-200, 100, 50, 50);
                 jlfondo.add(naveEnemiga);
-
                 Enemigo en = new Enemigo(naveEnemiga);
                 arraynaves.add(en);
-                en.start();
+                en.start();*/
+                    case 6:
+                        for (int i = 0; i < 4; i++) {
+                            JLabel naveEnemiga = new JLabel();
+                            ImageIcon ne = new ImageIcon(getClass().getResource("/Imagenes/enemigo.gif"));
+                            Icon icono4 = new ImageIcon(ne.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+                            naveEnemiga.setIcon(icono4);
+                            naveEnemiga.setBounds(-200, 100, 50, 50);
+                            jlfondo.add(naveEnemiga);
+
+                            Enemigo en = new Enemigo(naveEnemiga);
+                            arraynaves.add(en);
+                            en.start();
+                        }
+                        break;
+                    case 4:
+                        for (int i = 0; i < 5; i++) {
+                            JLabel naveEnemiga = new JLabel();
+                            ImageIcon ne = new ImageIcon(getClass().getResource("/Imagenes/enemigo.gif"));
+                            Icon icono4 = new ImageIcon(ne.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+                            naveEnemiga.setIcon(icono4);
+                            naveEnemiga.setBounds(-200, 100, 50, 50);
+                            jlfondo.add(naveEnemiga);
+
+                            Enemigo en = new Enemigo(naveEnemiga);
+                            arraynaves.add(en);
+                            en.start();
+                        }
+                        break;
+                    case 2:
+                        for (int i = 0; i < 4; i++) {
+                            JLabel naveEnemiga = new JLabel();
+                            ImageIcon ne = new ImageIcon(getClass().getResource("/Imagenes/enemigo.gif"));
+                            Icon icono4 = new ImageIcon(ne.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT));
+                            naveEnemiga.setIcon(icono4);
+                            naveEnemiga.setBounds(-200, 100, 50, 50);
+                            jlfondo.add(naveEnemiga);
+
+                            Enemigo en = new Enemigo(naveEnemiga);
+                            arraynaves.add(en);
+                            en.start();
+                        }
+                        break;
+                    default:
+                        break;
+                }
 
             }
 
